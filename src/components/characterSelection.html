@@ -1,0 +1,89 @@
+<p>
+  The time is
+  <strong>{hours}:{minutes}:{seconds}:{characterName}</strong>
+</p>
+
+<script>
+  export default {
+    onstate({ changed, current, previous }) {
+      // this fires before oncreate, and on every state change.
+      // the first time it runs, `previous` is undefined
+      if (changed.time) {
+        console.log(
+          `time changed: ${previous && previous.time} -> ${current.time}`,
+        );
+      }
+    },
+
+    oncreate() {
+      // this fires when the component has been
+      // rendered to the DOM
+      console.log('in oncreate');
+
+      this.interval = setInterval(() => {
+        this.set({ time: new Date() });
+      }, 1000);
+
+
+    },
+
+    onupdate({ changed, current, previous }) {
+      // this fires after oncreate, and after every state change
+      // once the DOM is synchronised with the data
+      console.log(`The DOM has been updated`);
+    },
+
+    ondestroy() {
+      // this fires when the component is
+      // removed from the DOM
+      console.log('in ondestroy');
+
+      clearInterval(this.interval);
+    },
+
+
+
+    data() {
+
+      return {
+        time: new Date(),
+      };
+    },
+
+    computed: {
+      name: ({ name }) => fetchCharacter(),
+      hours: ({ time }) => time.getHours(),
+      minutes: ({ time }) => time.getMinutes(),
+      seconds: ({ time }) => time.getSeconds(),
+    },
+  };
+</script>
+
+<!-- <p>
+	<strong>{nameChar}</strong>
+</p>
+
+<script>
+// eslint-disable-next-line import/no-mutable-exports
+let nameChar;
+
+async function fetchCharacter(){
+  const randomChar = ((Math.random() * 83) + 1).toFixed(0);
+  const url = `https://swapi.dev/api/people/${randomChar}`;
+  const response  = await fetch(url);
+  const data = await response.json();
+  // eslint-disable-next-line no-alert
+  nameChar = data.name;
+  return nameChar;
+};
+
+
+export default({
+  methods:{fetchCharacter},
+});
+
+
+
+
+
+</script> -->
