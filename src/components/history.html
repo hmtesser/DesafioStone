@@ -1,0 +1,22 @@
+<AppBarModifier title="Histórico"/>
+ {#each historico as history}
+<p>ID: {history.name} Date: {history.date}</p>
+
+ {/each}
+<script>
+  export default{
+    components: {
+      AppBarModifier: '@mamba/appbar/Modifier.html',
+    },
+    computed : {
+      historico : ({historico}) => JSON.parse(localStorage.date),
+    },
+
+  };
+</script>
+
+<style>
+  p {
+    margin: 10px 0 0 5px;
+  }
+</style>

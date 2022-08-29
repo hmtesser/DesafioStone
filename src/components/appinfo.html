@@ -1,0 +1,51 @@
+<!-- tela inicial com informações sobre o sistema-->
+<p>
+  Bem vindo ao Compendium de Rishi, aqui estão todas as informações adquiridas
+  ao longo de Éons de todos os seres importantes para a história dessa região
+  espacial.
+</p>
+<br />
+<p>
+  Seu funcionamento consiste em clicar no botão de "Pesquisa", e lá, há
+  informações básicas, assim como uma barra de pesquisa, que funciona por ID
+  cadastrado.
+</p>
+<br />
+<br />
+
+<!-- abre caixa de dialogo loading para se mover nas paginas-->
+<Button
+  size="full"
+  bottom
+  shortcut="enter"
+>
+  <a href="/CharSelection">Pesquisar</a>
+</Button>
+
+
+<script>
+  export default {
+    components: {
+      Button: '@mamba/button',
+      LoadingSprite: '@mamba/sprite/Loading.html',
+      Dialog: '@mamba/dialog',
+      CharacterSelection: 'components/characterSelection.html',
+    },
+    methods:{
+      changePage(){
+        document.location.href='components/characterSelection.html';
+      },
+    },
+  };
+</script>
+
+<style>
+  p {
+    margin-left: 5px;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+</style>

@@ -1,89 +1,151 @@
-<p>
-  The time is
-  <strong>{hours}:{minutes}:{seconds}:{characterName}</strong>
-</p>
+<AppBarModifier title="Pesquisar" />
+{#await promise}
+<p>Carregando informações</p>
+{:then character}
+<p>Nome: {character.name}</p>
+<p>Altura: {character.height}cm</p>
+<p>Sexo: {character.gender}</p>
+<p>Cor do cabelo : {character.hair_color}</p>
+<p>Cor de pele : {character.skin_color}</p>
+<p>Ano de nascimento : {character.birth_year} </p>
+<p>Cor do olho: {character.eye_color}</p>
+<p>Peso: {character.mass}&nbsp kg</p>
+<br />
+
+<!-- Npm install do input não funciona por versão do icon precisar ser > 4.0, tentei instalar o icon e não foi funcionalnpom-->
+
+<Input autofocus on:submit="changeIdValue(event.value)"></Input>
+<br />
+<Button
+  size="small"
+  height="25px"
+  shortcut="enter"
+>
+ <a href="/history">Histórico</a>
+</Button>
+{:catch error}
+<p>Quantidade de Midi-chlorians insuficiente</p>
+{/await}
+{#await promise}
+{:then character}
+<Printable ref:printableContent dithering="{true}">
+<p>INFORMAÇÕES COMPENDIUM</p>
+<br />
+<p>Nome: {character.name}</p>
+<p>Altura: {character.height}cm</p>
+<p>Sexo: {character.gender}</p>
+<p>Cor do cabelo : {character.hair_color}</p>
+<p>Cor de pele : {character.skin_color}</p>
+<p>Ano de nascimento : {character.birth_year} </p>
+<p>Cor do olho: {character.eye_color}</p>
+<p>Peso: {character.mass}&nbsp kg</p>
+<br />
+</Printable>
+<!-- Npm install do input não funciona por versão do icon precisar ser > 4.0, tentei instalar o icon e não foi funcionalnpom-->
+<Input autofocus on:submit="changeIdValue(event.value)"></Input>
+
+<Button
+  size="full"
+
+  shortcut="enter"
+  on:click="refs.printableContent.print()"
+  bottom
+>
+  Imprimir! (press. enter)
+</Button>
+{:catch error}
+{/await}
+
+
+
+  <!-- <Printable ref:printableContent dithering="{true}">
+    {#await promise}
+    {:then character}
+    <p>Nome: {character.name}</p>
+    <p>Altura: {character.height}cm</p>
+    <p>Sexo: {character.gender}</p>
+    <p>Cor do cabelo : {character.hair_color}</p>
+    <p>Cor de pele : {character.skin_color}</p>
+    <p>Ano de nascimento : {character.birth_year} </p>
+    <p>Cor do olho: {character.eye_color}</p>
+    <p>Peso: {character.mass}&nbsp kg</p>
+    <br />
+  </Printable> -->
+  <!-- {:catch error}
+  <p>teste</p>
+  {/await} -->
+
+
+
+
+
+
 
 <script>
-  export default {
-    onstate({ changed, current, previous }) {
-      // this fires before oncreate, and on every state change.
-      // the first time it runs, `previous` is undefined
-      if (changed.time) {
-        console.log(
-          `time changed: ${previous && previous.time} -> ${current.time}`,
-        );
-      }
-    },
 
-    oncreate() {
-      // this fires when the component has been
-      // rendered to the DOM
-      console.log('in oncreate');
-
-      this.interval = setInterval(() => {
-        this.set({ time: new Date() });
-      }, 1000);
+ const searchHistory = localStorage;
+ searchHistory.setItem('date','[]');
+ let id;
 
 
-    },
+ export default {
+   methods: {
+     changeIdValue(value){
+       // id = value;
+     },
+     async searchNew(value){
+       const url = `https://swapi.dev/api/people/${value}`;
+       const response = await fetch(url).then( x => x.json());
+       return response;
 
-    onupdate({ changed, current, previous }) {
-      // this fires after oncreate, and after every state change
-      // once the DOM is synchronised with the data
-      console.log(`The DOM has been updated`);
-    },
-
-    ondestroy() {
-      // this fires when the component is
-      // removed from the DOM
-      console.log('in ondestroy');
-
-      clearInterval(this.interval);
-    },
+     },
+     print() {
+       const frame = document.getElementById('frame');
+       frame.contentWindow.focus();
+     },
+   },
 
 
+   // new Promise(resolve => {
+   // const searchValue = this.event.value;
+   // const url = `https://swapi.dev/api/people${value}`;
+   // let response = fetch(url)
+   //   .then(x => x.json())
+   //   .then(y => y)
+   // let saveSearchDate = localStorage;
+   // saveSearchDate.setItem('searchDate', new Date())
+   // setTimeout(() => resolve(response),1000);
+   data() {
+     return {
 
-    data() {
+       promise: new Promise(resolve => {
+         const randomChar = (Math.random() * 83 + 1).toFixed(0);
+         const url = `https://swapi.dev/api/people/${randomChar}`;
+         const response = fetch(url)
+           .then(x => x.json());
+         const dates = JSON.parse(searchHistory.date);
 
-      return {
-        time: new Date(),
-      };
-    },
+         dates.push({
+           name: randomChar,
+           date: new Date().toLocaleString(),
+         });
+         searchHistory.setItem('date',JSON.stringify(dates));
+         setTimeout(() => resolve(response), 1000);
+       }),
+     };
+   },
+   components:{
+     AppBarModifier: '@mamba/appbar/Modifier.html',
+     Input: '@mamba/input',
+     Printable: '@mamba/printable',
+     Button: '@mamba/button',
+   },
 
-    computed: {
-      name: ({ name }) => fetchCharacter(),
-      hours: ({ time }) => time.getHours(),
-      minutes: ({ time }) => time.getMinutes(),
-      seconds: ({ time }) => time.getSeconds(),
-    },
-  };
+ };
 </script>
 
-<!-- <p>
-	<strong>{nameChar}</strong>
-</p>
-
-<script>
-// eslint-disable-next-line import/no-mutable-exports
-let nameChar;
-
-async function fetchCharacter(){
-  const randomChar = ((Math.random() * 83) + 1).toFixed(0);
-  const url = `https://swapi.dev/api/people/${randomChar}`;
-  const response  = await fetch(url);
-  const data = await response.json();
-  // eslint-disable-next-line no-alert
-  nameChar = data.name;
-  return nameChar;
-};
-
-
-export default({
-  methods:{fetchCharacter},
-});
-
-
-
-
-
-</script> -->
+<style>
+  p {
+    margin: 5px 0 0 5px;
+  }
+</style>
