@@ -45,9 +45,12 @@ sempre que necessário.
 4. Comentários no código explicando decisões tomadas são fortemente encorajados
 
 # CASOS DE USO
-> # PESQUISAR - Faz uma pesquisa na API do starwars(swapi.com/), trazendo informações dos personagens que fazem parte do universo star wars
-> # IMPRIMIR - Imprime a informação que está na maquininha, para uma pequena filipeta contendo todas as informações que estão na tela
-> # HISTÓRICO - Mostra Histórico de pesquisa, salvando seus ID's, caso haja curiosidade em saber qual personagem foi pesquisado, assim como a data de quando a pesquisa foi feita.
+ # PESQUISAR -
+ Faz uma pesquisa na API do starwars(swapi.com/), trazendo informações dos personagens que fazem parte do universo star wars
+ # IMPRIMIR -  
+ Imprime a informação que está na maquininha, para uma pequena filipeta contendo todas as informações que estão na tela
+ # HISTÓRICO 
+ Mostra Histórico de pesquisa, salvando seus ID's, caso haja curiosidade em saber qual personagem foi pesquisado, assim como a data de quando a pesquisa foi feita.
 
 # Mamba App template
 
